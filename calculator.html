@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Growth Calculator</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-x: hidden;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            body {
+                padding: 10px;
+            }
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .calculator-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            border-radius: 5px;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .results {
+            background-color: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .results h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: var(--secondary-color);
+        }
+        
+        @media (max-width: 480px) {
+            .result-value {
+                font-size: 24px;
+            }
+            
+            .breakdown-value {
+                font-size: 18px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .lambda-symbol {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+            color: white;
+            font-size: 16px;
+            margin: 0 2px;
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+
+        .chart-container {
+            height: 300px;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .breakdown {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 15px;
+            gap: 10px;
+        }
+
+        .breakdown-item {
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+            padding: 10px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 600px) {
+            .breakdown {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .breakdown-item {
+                margin-bottom: 5px;
+            }
+        }
+
+        .breakdown-item h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: var(--text-color);
+        }
+
+        .breakdown-value {
+            font-weight: bold;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        #performanceTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+            display: block;
+        }
+
+        #performanceTable th, #performanceTable td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: right;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            #performanceTable th, #performanceTable td {
+                padding: 6px;
+                font-size: 12px;
+            }
+        }
+
+        #performanceTable th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        #performanceTable tr:nth-child(even) {
+            background-color: #f1f5f9;
+        }
+
+        .toggle-table {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-table:hover {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <nav style="background-color: var(--card-bg); padding: 10px; text-align: center; margin-bottom: 20px;">
+        <a href="index.html" style="color: var(--primary-color); margin: 0 15px; text-decoration: none; font-weight: 500;">Home</a>
+        <a href="calculator.html" style="color: var(--primary-color); margin: 0 15px; text-decoration: none; font-weight: 500;">Investment Calculator</a>
+    </nav>
+    <div class="container">
+        <h1>Investment Growth Calculator</h1>
+        
+        <div class="calculator-section">
+            <div class="input-group">
+                <label for="initialInvestment">Current Investment Value:</label>
+                <input type="number" id="initialInvestment" value="45000" min="0" step="1000">
+            </div>
+            
+            <div class="input-group">
+                <label for="monthlyContribution">Monthly Contribution:</label>
+                <input type="number" id="monthlyContribution" value="750" min="0" step="10">
+            </div>
+            
+            <div class="input-group">
+                <label for="investmentYears">Investment Period (Years):</label>
+                <input type="number" id="investmentYears" value="5" min="1" max="40" step="1">
+            </div>
+            
+            <div class="input-group">
+                <label for="returnRate">Expected Annual Return Rate (%):</label>
+                <div class="slider-container">
+                    <input type="range" min="1" max="15" value="6.5" step="0.1" class="slider" id="returnRate">
+                    <div class="slider-value" id="returnRateValue">6.5%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results">
+            <h2>Projected Future Value</h2>
+            <div class="result-value" id="futureValue">$99,440</div>
+            
+            <div class="breakdown">
+                <div class="breakdown-item">
+                    <h3>Initial Investment</h3>
+                    <div class="breakdown-value" id="initialValue">$45,000</div>
+                </div>
+                <div class="breakdown-item">
+                    <h3>Total Contributions</h3>
+                    <div class="breakdown-value" id="totalContributions">$45,000</div>
+                </div>
+                <div class="breakdown-item">
+                    <h3>Total Earnings</h3>
+                    <div class="breakdown-value" id="totalEarnings">$9,440</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chart-container" id="chartContainer"></div>
+        
+        <button class="toggle-table" id="toggleTable">Show Detailed Breakdown</button>
+        
+        <table id="performanceTable" style="display:none">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Starting Value</th>
+                    <th>Annual Contribution</th>
+                    <th>Interest Earned</th>
+                    <th>End Value</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        
+        <div class="footer">
+            Edson <span class="lambda-symbol">λ</span> 2025
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // DOM elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const initialInvestmentInput = document.getElementById('initialInvestment');
+            const monthlyContributionInput = document.getElementById('monthlyContribution');
+            const investmentYearsInput = document.getElementById('investmentYears');
+            const returnRateInput = document.getElementById('returnRate');
+            const returnRateValue = document.getElementById('returnRateValue');
+            const futureValueElement = document.getElementById('futureValue');
+            const initialValueElement = document.getElementById('initialValue');
+            const totalContributionsElement = document.getElementById('totalContributions');
+            const totalEarningsElement = document.getElementById('totalEarnings');
+            const toggleTableButton = document.getElementById('toggleTable');
+            const performanceTable = document.getElementById('performanceTable');
+            const tableBody = document.getElementById('tableBody');
+            const chartContainer = document.getElementById('chartContainer');
+            
+            // Chart
+            let growthChart;
+            
+            // Calculate future value with monthly contributions
+            function calculateFutureValue(principal, monthlyContribution, ratePercent, years) {
+                const monthlyRate = ratePercent / 100 / 12;
+                const numMonths = years * 12;
+                
+                let yearlyData = [];
+                let currentValue = principal;
+                
+                for (let year = 1; year <= years; year++) {
+                    let startValue = currentValue;
+                    let annualContribution = 0;
+                    let interestEarned = 0;
+                    
+                    for (let month = 1; month <= 12; month++) {
+                        annualContribution += monthlyContribution;
+                        currentValue += monthlyContribution;
+                        
+                        let monthlyInterest = currentValue * monthlyRate;
+                        interestEarned += monthlyInterest;
+                        currentValue += monthlyInterest;
+                    }
+                    
+                    yearlyData.push({
+                        year: year,
+                        startValue: startValue,
+                        contribution: annualContribution,
+                        interest: interestEarned,
+                        endValue: currentValue
+                    });
+                }
+                
+                return {
+                    futureValue: currentValue,
+                    totalContributions: monthlyContribution * numMonths,
+                    totalEarnings: currentValue - principal - (monthlyContribution * numMonths),
+                    yearlyData: yearlyData
+                };
+            }
+            
+            // Format currency
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(value);
+            }
+            
+            // Update calculations
+            function updateCalculations() {
+                const initialInvestment = parseFloat(initialInvestmentInput.value) || 0;
+                const monthlyContribution = parseFloat(monthlyContributionInput.value) || 0;
+                const investmentYears = parseInt(investmentYearsInput.value) || 0;
+                const returnRate = parseFloat(returnRateInput.value) || 0;
+                
+                returnRateValue.textContent = returnRate.toFixed(1) + '%';
+                
+                const result = calculateFutureValue(initialInvestment, monthlyContribution, returnRate, investmentYears);
+                
+                futureValueElement.textContent = formatCurrency(result.futureValue);
+                initialValueElement.textContent = formatCurrency(initialInvestment);
+                totalContributionsElement.textContent = formatCurrency(result.totalContributions);
+                totalEarningsElement.textContent = formatCurrency(result.totalEarnings);
+                
+                updateTable(result.yearlyData);
+                updateChart(result.yearlyData);
+            }
+            
+            // Update table
+            function updateTable(yearlyData) {
+                tableBody.innerHTML = '';
+                
+                yearlyData.forEach(data => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${data.year}</td>
+                        <td>${formatCurrency(data.startValue)}</td>
+                        <td>${formatCurrency(data.contribution)}</td>
+                        <td>${formatCurrency(data.interest)}</td>
+                        <td>${formatCurrency(data.endValue)}</td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Update chart
+            function updateChart(yearlyData) {
+                const labels = yearlyData.map(data => `Year ${data.year}`);
+                const principalData = [];
+                const contributionsData = [];
+                const earningsData = [];
+                
+                const initialInvestment = parseFloat(initialInvestmentInput.value) || 0;
+                let runningContributions = 0;
+                
+                yearlyData.forEach(data => {
+                    principalData.push(initialInvestment);
+                    runningContributions += data.contribution;
+                    contributionsData.push(runningContributions);
+                    earningsData.push(data.endValue - initialInvestment - runningContributions);
+                });
+                
+                if (growthChart) {
+                    growthChart.destroy();
+                }
+                
+                const ctx = document.createElement('canvas');
+                chartContainer.innerHTML = '';
+                chartContainer.appendChild(ctx);
+                
+                growthChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Initial Investment',
+                                data: principalData,
+                                backgroundColor: '#3b82f6',
+                                borderColor: '#2563eb',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Contributions',
+                                data: contributionsData,
+                                backgroundColor: '#10b981',
+                                borderColor: '#059669',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Earnings',
+                                data: earningsData,
+                                backgroundColor: '#f59e0b',
+                                borderColor: '#d97706',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        label += formatCurrency(context.raw);
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return formatCurrency(value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Toggle table visibility
+            toggleTableButton.addEventListener('click', function() {
+                if (performanceTable.style.display === 'none' || performanceTable.style.display === '') {
+                    performanceTable.style.display = 'block';
+                    toggleTableButton.textContent = 'Hide Detailed Breakdown';
+                } else {
+                    performanceTable.style.display = 'none';
+                    toggleTableButton.textContent = 'Show Detailed Breakdown';
+                }
+            });
+            
+            // Event listeners
+            initialInvestmentInput.addEventListener('input', updateCalculations);
+            monthlyContributionInput.addEventListener('input', updateCalculations);
+            investmentYearsInput.addEventListener('input', updateCalculations);
+            returnRateInput.addEventListener('input', updateCalculations);
+            
+            // Initialize table display
+            performanceTable.style.display = 'none';
+            
+            // Initialize calculations
+            updateCalculations();
+        });
+    </script>
+</body>
+</html>
