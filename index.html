@@ -1,1 +1,267 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edson's Portfolio</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            padding: 1rem 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        nav a {
+            margin: 0 15px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            color: #4b5563;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .project-preview {
+            height: 180px;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 1.5rem;
+        }
+
+        footer {
+            background-color: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .projects {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hero {
+                padding: 2rem 1rem;
+            }
+        }
+        
+        .lambda-symbol {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+            color: white;
+            font-size: 16px;
+            margin: 0 2px;
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Edson <span class="lambda-symbol">λ</span></h1>
+    </header>
+    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="calculator.html">Investment Calculator</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    
+    <div class="container">
+        <section class="hero">
+            <h1>Welcome to My Portfolio</h1>
+            <p>I build useful tools and applications to help people make better financial decisions.</p>
+            <a href="calculator.html" class="cta-button">Try My Investment Calculator</a>
+        </section>
+        
+        <h2>Featured Projects</h2>
+        <div class="projects">
+            <div class="project-card">
+                <div class="project-preview">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="project-content">
+                    <h3>Investment Calculator</h3>
+                    <p>Calculate the growth of your investments over time with adjustable parameters for contributions and returns.</p>
+                    <a href="calculator.html" class="cta-button">View Project</a>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-preview">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 3v18h18"></path>
+                        <path d="M18 17v-6"></path>
+                        <path d="M13 17v-3"></path>
+                        <path d="M8 17v-1"></path>
+                    </svg>
+                </div>
+                <div class="project-content">
+                    <h3>Coming Soon</h3>
+                    <p>More financial tools are in development. Check back for updates on new projects.</p>
+                    <a href="#" class="cta-button">Learn More</a>
+                </div>
+            </div>
+        </div>
+        
+        <section id="about" style="margin-top: 3rem;">
+            <h2>About Me</h2>
+            <p>I'm passionate about helping people understand their finances and make informed investment decisions. With a background in finance and programming, I create tools that make complex financial concepts accessible.</p>
+        </section>
+        
+        <section id="contact" style="margin-top: 3rem;">
+            <h2>Contact</h2>
+            <p>Have questions or suggestions? Feel free to reach out to me at <a href="mailto:contact@example.com">contact@example.com</a>.</p>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>Edson <span class="lambda-symbol">λ</span> 2025</p>
+            <div class="social-links">
+                <a href="#" aria-label="GitHub">GitHub</a>
+                <a href="#" aria-label="LinkedIn">LinkedIn</a>
+                <a href="#" aria-label="Twitter">Twitter</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
