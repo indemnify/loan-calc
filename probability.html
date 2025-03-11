@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probability Simulator</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: var(--background-color);
+        }
+        
+        nav {
+            background-color: var(--card-bg); 
+            padding: 10px; 
+            text-align: center; 
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        nav a {
+            color: var(--primary-color); 
+            margin: 0 15px; 
+            text-decoration: none; 
+            font-weight: 500;
+        }
+        
+        nav a:hover {
+            text-decoration: underline;
+            color: var(--secondary-color);
+        }
+        
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .control-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        .results {
+            margin-top: 20px;
+        }
+        #coinFlipResults, #diceRollResults, #customEventResults {
+            margin-top: 10px;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .coin, .dice, .custom-event {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            margin: 2px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        .coin.heads {
+            background-color: gold;
+        }
+        .coin.tails {
+            background-color: silver;
+        }
+        .dice {
+            border-radius: 5px;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .custom-event.success {
+            background-color: #90EE90;
+        }
+        .custom-event.failure {
+            background-color: #FFB6C1;
+        }
+        .stat-box {
+            background-color: #e9e9e9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .explanation {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-left: 4px solid #4682B4;
+        }
+        .simulation-title {
+            font-weight: bold;
+            margin-top: 25px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        #barChart {
+            margin-top: 20px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+            height: 200px;
+        }
+        .bar-container {
+            display: flex;
+            height: 180px;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 5px;
+        }
+        .bar {
+            width: 30px;
+            background-color: var(--primary-color);
+            position: relative;
+        }
+        .bar-label {
+            position: absolute;
+            top: -20px;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .lambda-symbol {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+            color: white;
+            font-size: 16px;
+            margin: 0 2px;
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="calculator.html">Investment Calculator</a>
+        <a href="probability.html">Probability Simulator</a>
+    </nav>
+
+    <div class="container">
+        <h1>Probability Simulator</h1>
+        <p>Explore how probability works in real life by running simulations of common random events.</p>
+
+        <div class="simulation-title">Coin Flip Simulator</div>
+        <p>See the long-term behavior of flipping a coin multiple times</p>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="coinFlips">Number of Flips:</label>
+                <input type="number" id="coinFlips" min="1" max="1000" value="10">
+            </div>
+            <button onclick="simulateCoinFlips()">Flip Coins</button>
+        </div>
+        
+        <div class="results">
+            <div id="coinFlipResults"></div>
+            <div class="stat-box" id="coinStats"></div>
+        </div>
+
+        <div class="simulation-title">Dice Roll Simulator</div>
+        <p>Visualize the distribution of dice rolls over many attempts</p>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="diceRolls">Number of Rolls:</label>
+                <input type="number" id="diceRolls" min="1" max="1000" value="10">
+            </div>
+            <button onclick="simulateDiceRolls()">Roll Dice</button>
+        </div>
+        
+        <div class="results">
+            <div id="diceRollResults"></div>
+            <div class="stat-box" id="diceStats"></div>
+            <div id="barChart">
+                <div class="bar-container" id="diceBarChart"></div>
+            </div>
+        </div>
+
+        <div class="simulation-title">Custom Probability Event</div>
+        <p>Test any probability scenario, like weather forecasts or medical tests</p>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="customProb">Probability of Success (%):</label>
+                <input type="number" id="customProb" min="0" max="100" value="40">
+            </div>
+            <div class="control-group">
+                <label for="customTrials">Number of Trials:</label>
+                <input type="number" id="customTrials" min="1" max="1000" value="10">
+            </div>
+            <button onclick="simulateCustomEvent()">Run Simulation</button>
+        </div>
+        
+        <div class="results">
+            <div id="customEventResults"></div>
+            <div class="stat-box" id="customStats"></div>
+        </div>
+
+        <div class="explanation">
+            <h3>Why This Matters in Real Life:</h3>
+            <p><strong>Weather Forecasts:</strong> A "40% chance of rain" means that, in similar weather conditions, it rains 40% of the time. Try the custom simulator with 40% and see how variable the actual outcomes can be.</p>
+            <p><strong>Medical Tests:</strong> If a test is 95% accurate, there's still a 5% chance of an incorrect result. Simulate this to see how false positives/negatives might occur.</p>
+            <p><strong>Insurance:</strong> Companies set premiums based on event probabilities. If an accident has a 1% chance of happening, run enough simulations to see it will eventually occur.</p>
+            <p><strong>Gambling:</strong> Try simulating a slot machine with a 5% win rate and watch how the number of wins relates to the number of attempts.</p>
+        </div>
+        
+        <div class="footer">
+            Edson <span class="lambda-symbol">λ</span> 2025
+        </div>
+    </div>
+
+    <script>
+        function simulateCoinFlips() {
+            const numFlips = parseInt(document.getElementById('coinFlips').value);
+            const resultsDiv = document.getElementById('coinFlipResults');
+            const statsDiv = document.getElementById('coinStats');
+            
+            resultsDiv.innerHTML = '';
+            let heads = 0;
+            
+            for (let i = 0; i < numFlips; i++) {
+                const result = Math.random() < 0.5 ? 'H' : 'T';
+                const coinDiv = document.createElement('div');
+                coinDiv.className = `coin ${result === 'H' ? 'heads' : 'tails'}`;
+                coinDiv.textContent = result;
+                resultsDiv.appendChild(coinDiv);
+                
+                if (result === 'H') heads++;
+            }
+            
+            const headsPercentage = (heads / numFlips * 100).toFixed(1);
+            
+            statsDiv.innerHTML = `
+                <strong>Results:</strong><br>
+                Heads: ${heads} (${headsPercentage}%)<br>
+                Tails: ${numFlips - heads} (${(100 - parseFloat(headsPercentage)).toFixed(1)}%)<br>
+                <br>
+                <strong>Expected:</strong> 50% heads, 50% tails over the long run<br>
+                <strong>Deviation:</strong> ${Math.abs(parseFloat(headsPercentage) - 50).toFixed(1)}% from expected
+            `;
+        }
+        
+        function simulateDiceRolls() {
+            const numRolls = parseInt(document.getElementById('diceRolls').value);
+            const resultsDiv = document.getElementById('diceRollResults');
+            const statsDiv = document.getElementById('diceStats');
+            const barChartDiv = document.getElementById('diceBarChart');
+            
+            resultsDiv.innerHTML = '';
+            barChartDiv.innerHTML = '';
+            
+            // Count occurrences of each number
+            const counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
+            let sum = 0;
+            
+            for (let i = 0; i < numRolls; i++) {
+                const result = Math.floor(Math.random() * 6) + 1;
+                const diceDiv = document.createElement('div');
+                diceDiv.className = 'dice';
+                diceDiv.textContent = result;
+                resultsDiv.appendChild(diceDiv);
+                
+                counts[result]++;
+                sum += result;
+            }
+            
+            // Update statistics
+            const average = (sum / numRolls).toFixed(2);
+            
+            statsDiv.innerHTML = `
+                <strong>Results:</strong><br>
+                Average roll: ${average}<br>
+                <br>
+                <strong>Expected average:</strong> 3.5 over the long run<br>
+                <strong>Deviation:</strong> ${Math.abs(parseFloat(average) - 3.5).toFixed(2)} from expected
+            `;
+            
+            // Create bar chart
+            const maxCount = Math.max(...Object.values(counts));
+            for (let i = 1; i <= 6; i++) {
+                const pct = counts[i] / numRolls * 100;
+                const height = maxCount > 0 ? (counts[i] / maxCount * 150) : 0;
+                
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = `${height}px`;
+                
+                const label = document.createElement('div');
+                label.className = 'bar-label';
+                label.textContent = `${i}: ${pct.toFixed(0)}%`;
+                
+                bar.appendChild(label);
+                barChartDiv.appendChild(bar);
+            }
+        }
+        
+        function simulateCustomEvent() {
+            const probability = parseInt(document.getElementById('customProb').value) / 100;
+            const numTrials = parseInt(document.getElementById('customTrials').value);
+            const resultsDiv = document.getElementById('customEventResults');
+            const statsDiv = document.getElementById('customStats');
+            
+            resultsDiv.innerHTML = '';
+            let successes = 0;
+            
+            for (let i = 0; i < numTrials; i++) {
+                const result = Math.random() < probability;
+                const eventDiv = document.createElement('div');
+                eventDiv.className = `custom-event ${result ? 'success' : 'failure'}`;
+                eventDiv.textContent = result ? '✓' : '✗';
+                resultsDiv.appendChild(eventDiv);
+                
+                if (result) successes++;
+            }
+            
+            const successPercentage = (successes / numTrials * 100).toFixed(1);
+            
+            statsDiv.innerHTML = `
+                <strong>Results:</strong><br>
+                Successes: ${successes} (${successPercentage}%)<br>
+                Failures: ${numTrials - successes} (${(100 - parseFloat(successPercentage)).toFixed(1)}%)<br>
+                <br>
+                <strong>Expected:</strong> ${(probability * 100).toFixed(1)}% success rate<br>
+                <strong>Deviation:</strong> ${Math.abs(parseFloat(successPercentage) - probability * 100).toFixed(1)}% from expected
+            `;
+        }
+
+        // Run initial simulations
+        simulateCoinFlips();
+        simulateDiceRolls();
+        simulateCustomEvent();
+    </script>
+</body>
+</html>
